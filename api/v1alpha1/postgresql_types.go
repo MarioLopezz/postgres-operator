@@ -23,12 +23,12 @@ import (
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
-// PostgresSpec defines the desired state of Postgres
-type PostgresSpec struct {
+// PostgresSpec defines the desired state of Postgresql
+type PostgresqlSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Size defines the number of Postgres instances
+	// Size defines the number of Postgresql instances
 	// The following markers will use OpenAPI v3 schema to validate the value
 	// More info: https://book.kubebuilder.io/reference/markers/crd-validation.html
 	// +kubebuilder:validation:Minimum=1
@@ -37,15 +37,15 @@ type PostgresSpec struct {
 	Size int32 `json:"size,omitempty"`
 }
 
-// PostgresStatus defines the observed state of Postgres
+// PostgresStatus defines the observed state of Postgresql
 type PostgresStatus struct {
-	// Represents the observations of a Postgres's current state.
-	// Postgres.status.conditions.type are: "Available", "Progressing", and "Degraded"
-	// Postgres.status.conditions.status are one of True, False, Unknown.
-	// Postgres.status.conditions.reason the value should be a CamelCase string and producers of specific
+	// Represents the observations of a Postgresql's current state.
+	// Postgresql.status.conditions.type are: "Available", "Progressing", and "Degraded"
+	// Postgresql.status.conditions.status are one of True, False, Unknown.
+	// Postgresql.status.conditions.reason the value should be a CamelCase string and producers of specific
 	// condition types may define expected values and meanings for this field, and whether the values
 	// are considered a guaranteed API.
-	// Postgres.status.conditions.Message is a human readable message indicating details about the transition.
+	// Postgresql.status.conditions.Message is a human readable message indicating details about the transition.
 	// For further information see: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#typical-status-properties
 
 	Conditions []metav1.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,1,rep,name=conditions"`
@@ -54,8 +54,8 @@ type PostgresStatus struct {
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
 
-// Postgres is the Schema for the postgres API
-type Postgres struct {
+// Postgresql is the Schema for the postgresql API
+type Postgresql struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
@@ -65,13 +65,13 @@ type Postgres struct {
 
 //+kubebuilder:object:root=true
 
-// PostgresList contains a list of Postgres
-type PostgresList struct {
+// PostgresList contains a list of Postgresql
+type PostgresqlList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Postgres `json:"items"`
+	Items           []Postgresql `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&Postgres{}, &PostgresList{})
+	SchemeBuilder.Register(&Postgresql{}, &PostgresqlList{})
 }
