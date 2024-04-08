@@ -31,8 +31,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	bigdatav1alpha1 "github.com/kubernetesbigdataeg/postgres-operator/api/v1alpha1"
-	"github.com/kubernetesbigdataeg/postgres-operator/controllers"
+	bigdatav1alpha1 "github.com/kubernetesbigdataeg/postgresql-operator/api/v1alpha1"
+	"github.com/kubernetesbigdataeg/postgresql-operator/controllers"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -92,9 +92,9 @@ func main() {
 	if err = (&controllers.PostgresReconciler{
 		Client:   mgr.GetClient(),
 		Scheme:   mgr.GetScheme(),
-		Recorder: mgr.GetEventRecorderFor("postgres-controller"),
+		Recorder: mgr.GetEventRecorderFor("postgresql-controller"),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Postgres")
+		setupLog.Error(err, "unable to create controller", "controller", "Postgresql")
 		os.Exit(1)
 	}
 	//+kubebuilder:scaffold:builder

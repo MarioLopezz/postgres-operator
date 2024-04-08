@@ -1,4 +1,4 @@
-module github.com/kubernetesbigdataeg/postgres-operator
+module github.com/kubernetesbigdataeg/postgresql-operator
 
 go 1.19
 

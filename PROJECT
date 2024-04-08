@@ -6,16 +6,16 @@ plugins:
     resources:
     - domain: kubernetesbigdataeg.org
       group: bigdata
-      kind: Postgres
+      kind: Postgresql
       options:
         containerCommand: memcached,-m=64,modern,-v
-        image: docker.io/kubernetesbigdataeg/postgres:15.0.0-1
+        image: docker.io/kubernetesbigdataeg/postgresql:15.0.0-1
         runAsUser: "1000"
       version: v1alpha1
   manifests.sdk.operatorframework.io/v2: {}
   scorecard.sdk.operatorframework.io/v2: {}
-projectName: postgres-operator
-repo: github.com/kubernetesbigdataeg/postgres-operator
+projectName: postgresql-operator
+repo: github.com/kubernetesbigdataeg/postgresql-operator
 resources:
 - api:
     crdVersion: v1
@@ -23,7 +23,7 @@ resources:
   controller: true
   domain: kubernetesbigdataeg.org
   group: bigdata
-  kind: Postgres
-  path: github.com/kubernetesbigdataeg/postgres-operator/api/v1alpha1
+  kind: Postgresql
+  path: github.com/kubernetesbigdataeg/postgresql-operator/api/v1alpha1
   version: v1alpha1
 version: "3"

@@ -31,24 +31,24 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
-	bigdatav1alpha1 "github.com/kubernetesbigdataeg/postgres-operator/api/v1alpha1"
+	bigdatav1alpha1 "github.com/kubernetesbigdataeg/postgresql-operator/api/v1alpha1"
 )
 
-var _ = Describe("Postgres controller", func() {
-	Context("Postgres controller test", func() {
+var _ = Describe("Postgresql controller", func() {
+	Context("Postgresql controller test", func() {
 
-		const PostgresName = "test-postgres"
+		const PostgresqlName = "test-postgresql"
 
 		ctx := context.Background()
 
 		namespace := &corev1.Namespace{
 			ObjectMeta: metav1.ObjectMeta{
-				Name:      PostgresName,
-				Namespace: PostgresName,
+				Name:      PostgresqlName,
+				Namespace: PostgresqlName,
 			},
 		}
 
-		typeNamespaceName := types.NamespacedName{Name: PostgresName, Namespace: PostgresName}
+		typeNamespaceName := types.NamespacedName{Name: PostgresqlName, Namespace: PostgresqlName}
 
 		BeforeEach(func() {
 			By("Creating the Namespace to perform the tests")
@@ -70,35 +70,35 @@ var _ = Describe("Postgres controller", func() {
 			_ = os.Unsetenv("POSTGRES_IMAGE")
 		})
 
-		It("should successfully reconcile a custom resource for Postgres", func() {
-			By("Creating the custom resource for the Kind Postgres")
-			postgres := &bigdatav1alpha1.Postgres{}
-			err := k8sClient.Get(ctx, typeNamespaceName, postgres)
+		It("should successfully reconcile a custom resource for Postgresql", func() {
+			By("Creating the custom resource for the Kind Postgresql")
+			postgresql := &bigdatav1alpha1.Postgresql{}
+			err := k8sClient.Get(ctx, typeNamespaceName, postgresql)
 			if err != nil && errors.IsNotFound(err) {
 				// Let's mock our custom resource at the same way that we would
 				// apply on the cluster the manifest under config/samples
-				postgres := &bigdatav1alpha1.Postgres{
+				postgresql := &bigdatav1alpha1.Postgresql{
 					ObjectMeta: metav1.ObjectMeta{
-						Name:      PostgresName,
+						Name:      PostgresqlName,
 						Namespace: namespace.Name,
 					},
-					Spec: bigdatav1alpha1.PostgresSpec{
+					Spec: bigdatav1alpha1.PostgresqlSpec{
 						Size: 1,
 					},
 				}
 
-				err = k8sClient.Create(ctx, postgres)
+				err = k8sClient.Create(ctx, postgresql)
 				Expect(err).To(Not(HaveOccurred()))
 			}
 
 			By("Checking if the custom resource was successfully created")
 			Eventually(func() error {
-				found := &bigdatav1alpha1.Postgres{}
+				found := &bigdatav1alpha1.Postgresql{}
 				return k8sClient.Get(ctx, typeNamespaceName, found)
 			}, time.Minute, time.Second).Should(Succeed())
 
 			By("Reconciling the custom resource created")
-			postgresReconciler := &PostgresReconciler{
+			postgresReconciler := &PostgresqlReconciler{
 				Client: k8sClient,
 				Scheme: k8sClient.Scheme(),
 			}
@@ -114,15 +114,15 @@ var _ = Describe("Postgres controller", func() {
 				return k8sClient.Get(ctx, typeNamespaceName, found)
 			}, time.Minute, time.Second).Should(Succeed())
 
-			By("Checking the latest Status Condition added to the Postgres instance")
+			By("Checking the latest Status Condition added to the Postgresql instance")
 			Eventually(func() error {
-				if postgres.Status.Conditions != nil && len(postgres.Status.Conditions) != 0 {
-					latestStatusCondition := postgres.Status.Conditions[len(postgres.Status.Conditions)-1]
-					expectedLatestStatusCondition := metav1.Condition{Type: typeAvailablePostgres,
+				if postgresql.Status.Conditions != nil && len(postgresql.Status.Conditions) != 0 {
+					latestStatusCondition := postgresql.Status.Conditions[len(postgresql.Status.Conditions)-1]
+					expectedLatestStatusCondition := metav1.Condition{Type: typeAvailablePostgresql,
 						Status: metav1.ConditionTrue, Reason: "Reconciling",
-						Message: fmt.Sprintf("Deployment for custom resource (%s) with %d replicas created successfully", postgres.Name, postgres.Spec.Size)}
+						Message: fmt.Sprintf("Deployment for custom resource (%s) with %d replicas created successfully", postgresql.Name, postgresql.Spec.Size)}
 					if latestStatusCondition != expectedLatestStatusCondition {
-						return fmt.Errorf("The latest status condition added to the postgres instance is not as expected")
+						return fmt.Errorf("The latest status condition added to the postgresql instance is not as expected")
 					}
 				}
 				return nil
